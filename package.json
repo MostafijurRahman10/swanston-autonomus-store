@@ -1,0 +1,19 @@
+{
+  "name": "autonomous-supermarket",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node server/dev.js",
+    "seed": "node server/seed.js",
+    "test": "node --test server/*.test.js",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "express": "^4.22.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "vite": "^6.4.3"
+  }
+}

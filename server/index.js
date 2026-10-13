@@ -1,0 +1,5 @@
+import express from 'express';
+import {db} from './db.js';
+import {simulate} from './sim.js';
+import {report,dayReport} from './report.js';
+const app=express();app.use(express.json());app.get('/api/runs',(_req,res)=>res.json(db.prepare('SELECT id,created_at,seed,status,submitted FROM runs ORDER BY submitted DESC,created_at DESC').all()));app.get('/api/runs/:id/report',(req,res)=>{const data=report(req.params.id);res.status(data?200:404).json(data||{error:'Run not found'})});app.get('/api/runs/:id/days/:day',(req,res)=>{const n=Number(req.params.day);const data=Number.isInteger(n)&&n>=1&&n<=60?dayReport(req.params.id,n):null;res.status(data?200:404).json(data||{error:'Day not found'})});app.post('/api/runs',(req,res)=>{try{const seed=req.body?.seed===undefined?undefined:Number(req.body.seed);if(seed!==undefined&&(!Number.isInteger(seed)||seed<0||seed>2147483647))return res.status(400).json({error:'Seed must be an integer from 0 to 2147483647'});const id=simulate(seed);res.status(201).json({id})}catch(e){console.error(e);res.status(500).json({error:'Simulation failed'})}});app.listen(3001,'127.0.0.1',()=>console.log('API http://127.0.0.1:3001'));

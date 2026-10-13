@@ -1,0 +1,2 @@
+import {db} from './db.js';import {simulate} from './sim.js';import {report} from './report.js';
+let row=db.prepare('SELECT id FROM runs WHERE submitted=1').get();if(!row){const id=simulate(20261011,true);row={id}}const r=report(row.id);console.log(JSON.stringify({submittedRun:row.id,days:r.totals.day_count,products:r.products.length,openingCost:r.products.reduce((a,p)=>a+p.cost_cents*p.initial_qty,0)/100,revenue:r.totals.revenue_cents/100,assurance:r.assurance.passed,checks:r.assurance.checks},null,2));
